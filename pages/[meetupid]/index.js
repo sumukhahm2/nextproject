@@ -1,24 +1,25 @@
 import MeetUpDetails from "@/components/meetup-details"
 import { useRouter } from "next/router"
-function Details(){
+import { MongoClient, ObjectId } from "mongodb"
+function Details(props){
     const router=useRouter()
     const value=router.query.meetupid
-    console.log(value)
-   return <MeetUpDetails item={value}/>
+    //console.log(value)
+   return <MeetUpDetails item={props.meetupData}/>
 }
 
 export async function getStaticPaths(){
     return{
-        fallback:false,
+        fallback:true,
          paths:[
              {
                 params:{
-                    meetupid:'m1'
+                    meetupid:'654c5974dbf8016a4e84dbeb'
                 }
             },
             {
                 params:{
-                    meetupid:'m2'
+                    meetupid:'654c75eadbf8016a4e84dbec'
                 }
             },
             {
@@ -32,14 +33,21 @@ export async function getStaticPaths(){
 export async function getStaticProps(context){
 
     const id=context.params.meetupid
+    const client= await MongoClient.connect('mongodb+srv://Vighnaraj:miSW6zX3iD6Xrgfd@cluster0.ogxnkc8.mongodb.net/meetups?retryWrites=true&w=majority')
+    const db=client.db()
+    const meetupCollections=db.collection('meetups')
+    const result=await meetupCollections.findOne({description:"hello"}) 
+     
+    client.close()   
+    console.log(result)
     return {
         props:{
             meetupData:{
-                image:'https://housing.com/news/wp-content/uploads/2022/11/Famous-tourist-places-in-India-state-T-compressed.jpg',
-                id:id,
-                title:'A First Meetup',
-                address:'some address5 some 12345 street some city',
-                description:'This is First Meetup'
+                image:'', 
+                id:'',
+                title:'',
+                address:'',
+                description:''
             }
         }
     }

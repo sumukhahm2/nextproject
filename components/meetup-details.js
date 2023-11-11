@@ -1,17 +1,15 @@
 const { default: Card } = require("./ui/Card");
 import classes from './meetups/MeetupItem.module.css'
-import { DUMMY_MEETUPS } from '@/pages';
 function MeetUpDetails(props){
-      const items=DUMMY_MEETUPS.filter((obj)=> obj.id===props.item)
-      console.log(items[0])
+     console.log(props.item)
     return(
         <Card>
             <div className={classes.image}>
-          <img src={items[0].image} alt={items[0].title} />
+          <img src={props.item.image} alt={props.item.title} />
         </div>
         <div className={classes.content}>
-          <h3>{items[0].title}</h3>
-          <address>{items.address}</address>
+          <h3>{props.item.title}</h3>
+          <address>{props.item.address}</address>
         </div>
         </Card>
     )
