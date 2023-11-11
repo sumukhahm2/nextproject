@@ -1,6 +1,7 @@
 import MeetUpDetails from "@/components/meetup-details"
 import { useRouter } from "next/router"
 import { MongoClient, ObjectId } from "mongodb"
+//import { ObjectId } from "mongodb"
 function Details(props){
     const router=useRouter()
     const value=router.query.meetupid
@@ -21,11 +22,6 @@ export async function getStaticPaths(){
                 params:{
                     meetupid:'654c75eadbf8016a4e84dbec'
                 }
-            },
-            {
-                params:{
-                    meetupid:'m3'
-                }
             }
          ]
     }
@@ -36,18 +32,19 @@ export async function getStaticProps(context){
     const client= await MongoClient.connect('mongodb+srv://Vighnaraj:miSW6zX3iD6Xrgfd@cluster0.ogxnkc8.mongodb.net/meetups?retryWrites=true&w=majority')
     const db=client.db()
     const meetupCollections=db.collection('meetups')
-    const result=await meetupCollections.findOne({description:"hello"}) 
+   
+    const result=await meetupCollections.findOne({_id:new ObjectId(id)})  
      
     client.close()   
     console.log(result)
     return {
         props:{
-            meetupData:{
-                image:'', 
-                id:'',
-                title:'',
-                address:'',
-                description:''
+            meetupData:{ 
+                image:result.image, 
+                id:id,
+                title:result.title,
+                address:result.address,
+                description:result.description
             }
         }
     }
